@@ -35,7 +35,7 @@ public class SwaggerConfig {
 
         List<Server> servers = List.of(
                 new Server().url("http://localhost:8080").description("Local-test Server"),
-                new Server().url("https://betalab.duckdns.org").description("Production Server")
+                new Server().url("https://ganzi.duckdns.org").description("Production Server")
         );
 
         return new OpenAPI()
