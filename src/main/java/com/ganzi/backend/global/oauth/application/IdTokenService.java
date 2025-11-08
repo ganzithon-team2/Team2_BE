@@ -7,12 +7,13 @@ import com.ganzi.backend.global.oauth.domain.SocialProvider;
 import com.ganzi.backend.global.security.userdetails.CustomUserDetails;
 import com.ganzi.backend.user.User;
 import com.ganzi.backend.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import java.util.Base64;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,23 +36,37 @@ public class IdTokenService {
             Claims claims = decodeIdToken(idToken);
             SocialProvider socialProvider = checkIssuer(claims.getIssuer());
 
-            Map<String, Object> attributes = tokenToAttributes(idToken, socialProvider);
+            Map<String, Object> attributes = claimsToAttributes(claims, socialProvider);
             IdTokenAttributes idTokenAttributes = new IdTokenAttributes(attributes, socialProvider);
 
             User findUser = checkUser(idTokenAttributes);
 
             return new CustomUserDetails(findUser);
-        } catch (JwtException e) {
+        } catch (GeneralException e) {
+            throw e;
+        } catch (Exception e) {
             log.warn("ID 토큰 인증 오류: {}", e.getMessage());
             throw new GeneralException(ErrorStatus.INVALID_TOKEN);
         }
     }
 
     private Claims decodeIdToken(String idToken) {
-        return Jwts.parser()
-                .build()
-                .parseUnsecuredClaims(idToken)
-                .getPayload();
+        try {
+            String[] parts = idToken.split("\\.");
+            if (parts.length != 3) {
+                throw new GeneralException(ErrorStatus.INVALID_TOKEN);
+            }
+
+            String payload = new String(Base64.getUrlDecoder().decode(parts[1]));
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> claimsMap = mapper.readValue(payload, Map.class);
+
+            return Jwts.claims().add(claimsMap).build();
+        } catch (Exception e) {
+            log.error("ID 토큰 디코딩 실패", e);
+            throw new GeneralException(ErrorStatus.INVALID_TOKEN);
+        }
     }
 
     private SocialProvider checkIssuer(String issuer) {
@@ -79,24 +94,14 @@ public class IdTokenService {
         return userRepository.save(createdUser);
     }
 
-    private Map<String, Object> tokenToAttributes(String idToken, SocialProvider socialProvider) {
-        try {
-            if (socialProvider == SocialProvider.KAKAO) {
-                Claims claims = Jwts.parser()
-                        .build()
-                        .parseUnsecuredClaims(idToken)
-                        .getPayload();
-
-                return Map.of(
-                        CLAIM_SUB, claims.getSubject(),
-                        CLAIM_EMAIL, claims.get(CLAIM_EMAIL, String.class),
-                        CLAIM_NICKNAME, claims.get(CLAIM_NICKNAME, String.class),
-                        CLAIM_PICTURE, claims.get(CLAIM_PICTURE, String.class)
-                );
-            }
-        } catch (JwtException e) {
-            log.warn("ID 토큰 검증 실패 ({}): {}", socialProvider, e.getMessage());
-            throw e;
+    private Map<String, Object> claimsToAttributes(Claims claims, SocialProvider socialProvider) {
+        if (socialProvider == SocialProvider.KAKAO) {
+            return Map.of(
+                    CLAIM_SUB, claims.getSubject(),
+                    CLAIM_EMAIL, claims.get(CLAIM_EMAIL, String.class),
+                    CLAIM_NICKNAME, claims.get(CLAIM_NICKNAME, String.class),
+                    CLAIM_PICTURE, claims.get(CLAIM_PICTURE, String.class)
+            );
         }
         return null;
     }
