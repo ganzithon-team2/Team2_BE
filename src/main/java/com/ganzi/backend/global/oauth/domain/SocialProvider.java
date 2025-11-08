@@ -1,4 +1,4 @@
-package com.ganzi.backend.global.oauth;
+package com.ganzi.backend.global.oauth.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

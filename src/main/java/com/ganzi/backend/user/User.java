@@ -1,7 +1,7 @@
 package com.ganzi.backend.user;
 
 import com.ganzi.backend.global.entity.BaseEntity;
-import com.ganzi.backend.global.oauth.SocialProvider;
+import com.ganzi.backend.global.oauth.domain.SocialProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(name = "nickname")
-    private String nickName;
+    private String nickname;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
@@ -49,10 +49,10 @@ public class User extends BaseEntity {
     private String refreshToken;
 
     @Builder
-    public User(String email, String nickName, String profileImageUrl, RoleType roleType, SocialProvider socialProvider,
+    public User(String email, String nickname, String profileImageUrl, RoleType roleType, SocialProvider socialProvider,
                 String oauthId) {
         this.email = email;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
         this.roleType = roleType;
         this.socialProvider = socialProvider;
@@ -63,8 +63,8 @@ public class User extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void updateNickName(String nickName) {
-        this.nickName = nickName;
+    public void updateNickName(String nickname) {
+        this.nickname = nickname;
     }
 
     public void updateProfileImageUrl(String profileImageUrl) {
