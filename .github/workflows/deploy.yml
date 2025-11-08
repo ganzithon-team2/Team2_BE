@@ -70,11 +70,13 @@ jobs:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          envs: IMAGE_URI,IMAGE_TAG,AWS_REGION,DB_HOST,DB_PORT,DB_NAME,DB_USERNAME,DB_PASSWORD,S3_REGION,S3_BUCKET_NAME,AWS_ACCESS_KEY,AWS_SECRET_ACCESS_KEY
+          envs: IMAGE_URI,IMAGE_TAG,AWS_REGION,DB_HOST,DB_PORT,DB_NAME,DB_USERNAME,DB_PASSWORD,S3_REGION,S3_BUCKET_NAME,AWS_ACCESS_KEY,AWS_SECRET_ACCESS_KEY,
+            JWT_SECRET_KEY
           script: |
             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $(echo $IMAGE_URI | cut -d'/' -f1)
 
@@ -95,4 +97,5 @@ jobs:
               -e S3_BUCKET_NAME=$S3_BUCKET_NAME \
               -e AWS_ACCESS_KEY=$AWS_ACCESS_KEY \
               -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+              -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
               $IMAGE_URI:$IMAGE_TAG
