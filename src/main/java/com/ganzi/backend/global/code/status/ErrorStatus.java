@@ -47,11 +47,14 @@ public enum ErrorStatus implements BaseErrorCode {
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3500", "파일 업로드 중 오류가 발생했습니다."),
     S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3500", "파일 삭제 중 오류가 발생했습니다."),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB500", "데이터베이스 처리 중 오류가 발생했습니다."),
+    EXTERNAL_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "API500", "외부 API 호출 중 오류가 발생했습니다."),
 
     // 502, 503, 504
     BAD_GATEWAY(HttpStatus.BAD_GATEWAY, "COMMON502", "불완전한 게이트웨이 응답을 받았습니다."),
     SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "COMMON503", "서비스를 일시적으로 사용할 수 없습니다."),
-    GATEWAY_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "COMMON504", "게이트웨이 연결이 시간 초과되었습니다.");
+    ANIMAL_API_CALL_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "ANIMAL503", "유기동물 API 호출에 실패했습니다."),
+    GATEWAY_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "COMMON504", "게이트웨이 연결이 시간 초과되었습니다."),
+    ANIMAL_API_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "ANIMAL504", "유기동물 API 응답 시간이 초과되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
