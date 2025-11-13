@@ -24,3 +24,11 @@ springdoc:
 logging:
   level:
     com.ganzi.backend: info
+
+animal:
+  api:
+    base-url: https://apis.data.go.kr/1543061/abandonmentPublicService_v2
+    service-key: ${ANIMAL_API_SERVICE_KEY}
+    timeout:
+      connect: 10000
+      read: 60000
