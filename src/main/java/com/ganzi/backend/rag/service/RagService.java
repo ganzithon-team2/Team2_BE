@@ -43,13 +43,13 @@ public class RagService {
     }
 
     public RagResponse getAnswer(RagRequest request){
-        log.info("RAG Service 진입 - 쿼리: {}", request.getQuery());
-        return callUpstageApi(request.getQuery());
+        log.info("RAG Service 진입 - 쿼리: {}", request.query());
+        return callUpstageApi(request.query());
     }
 
-    // API 호출 로직을 분리한 프라이빗 메서드
+    // API 호출 로직을 분리
     private RagResponse callUpstageApi(String query){
-        //log.debug("Upstage Endpoint URL: {}", endpointUrl);
+        log.debug("Upstage Endpoint URL: {}", endpointUrl);
         //log.debug("RAG ID: {}", ragId);
 
         Map<String, Object> message = Map.of(
@@ -62,7 +62,7 @@ public class RagService {
                 "messages", List.of(message),
                 "stream", false
         );
-        //log.debug("Request Body: {}", requestBody);
+        log.debug("Request Body: {}", requestBody);
 
         UpstageApiResponse apiResponse = ragApiClient.post()
                 .uri(endpointUrl)
@@ -86,9 +86,9 @@ public class RagService {
                 .block();   //비동기 코드를 동시적으로 기다림
 
         String answer = Optional.ofNullable(apiResponse)
-                .flatMap(r -> r.getChoices().stream().findFirst())
-                .map(c -> c.getMessage())
-                .map(m -> m.getContent())
+                .flatMap(r -> r.choices().stream().findFirst())
+                .map(c -> c.message())
+                .map(m -> m.content())
                 .orElse(null); // 답변이 없을 경우 null 할당
 
         if (answer == null) {
@@ -99,9 +99,6 @@ public class RagService {
         //List<SourceDocument> sources = List.of();
 
         //6. Upstage DTO를 프로젝트의 RagResponse로 변환하여 반환
-        return RagResponse.builder()
-                .answer(answer)
-                //.sources(sources)
-                .build();
+        return new RagResponse(answer);
     }
 }
