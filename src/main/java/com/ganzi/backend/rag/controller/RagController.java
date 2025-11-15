@@ -39,8 +39,9 @@ public class RagController {
             @RequestBody @Valid RagRequest request,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
-        String username = (customUserDetails != null)?customUserDetails.getUsername():"anonymousUser";
-        log.info("User ID '{}' 님의 질문입니다.", username);
+        //String username = (customUserDetails != null)?customUserDetails.getUsername():"anonymousUser";
+        String userId = customUserDetails.getUsername();
+        //log.info("User ID '{}' 님의 질문입니다.", username);
 
         RagResponse response = ragService.getAnswer(request);
         return ResponseEntity.ok(ApiResponse.of(SuccessStatus.OK, response));
