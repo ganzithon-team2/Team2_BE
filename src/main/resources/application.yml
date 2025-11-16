@@ -44,3 +44,8 @@ upstage:
   ai-space:
     api-key: ${UPSTAGE_AI_API_KEY}
     endpoint-url: ${UPSTAGE_AI_SPACE_ENDPOINT_URL:https://api.upstage.ai/v1/chat/completions}
+
+oauth:
+  providers:
+    kakao:
+      token-uri: https://kauth.kakao.com/oauth/token
