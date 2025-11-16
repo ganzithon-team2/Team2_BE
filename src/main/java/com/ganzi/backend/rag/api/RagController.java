@@ -1,20 +1,17 @@
-package com.ganzi.backend.rag.controller;
+package com.ganzi.backend.rag.api;
 
 import com.ganzi.backend.global.code.dto.ApiResponse;
 import com.ganzi.backend.global.code.status.SuccessStatus;
 import com.ganzi.backend.global.security.userdetails.CustomUserDetails;
-import com.ganzi.backend.rag.dto.RagRequest;
-import com.ganzi.backend.rag.dto.RagResponse;
-import com.ganzi.backend.rag.service.RagService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.ganzi.backend.rag.api.doc.RagControllerDoc;
+import com.ganzi.backend.rag.api.dto.RagRequest;
+import com.ganzi.backend.rag.api.dto.RagResponse;
+import com.ganzi.backend.rag.application.RagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.util.List;
@@ -22,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class RagController implements RagControllerDoc{
+public class RagController implements RagControllerDoc {
     private final RagService ragService;
 
     @Override

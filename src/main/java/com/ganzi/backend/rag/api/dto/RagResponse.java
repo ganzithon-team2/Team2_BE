@@ -1,4 +1,4 @@
-package com.ganzi.backend.rag.dto;
+package com.ganzi.backend.rag.api.dto;
 
 public record RagResponse (
 
