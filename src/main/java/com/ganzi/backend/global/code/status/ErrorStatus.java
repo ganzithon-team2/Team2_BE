@@ -17,6 +17,7 @@ public enum ErrorStatus implements BaseErrorCode {
     FILE_DOWNLOAD_FAILED(HttpStatus.BAD_REQUEST, "FILE400", "이미지 다운로드에 실패했습니다."),
     FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "FILE400", "파일 크기가 10MB를 초과했습니다."),
     INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "FILE400", "지원하지 않는 파일 형식입니다. (JPG, PNG, WEBP만 지원)"),
+    UNSUPPORTED_OAUTH_PROVIDER(HttpStatus.BAD_REQUEST, "OAUTH400", "지원하지 않는 OAuth 제공자입니다."),
 
     // 401 Unauthorized
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH401", "인증이 필요합니다."),
@@ -49,6 +50,7 @@ public enum ErrorStatus implements BaseErrorCode {
     S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3500", "파일 삭제 중 오류가 발생했습니다."),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB500", "데이터베이스 처리 중 오류가 발생했습니다."),
     EXTERNAL_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "API500", "외부 API 호출 중 오류가 발생했습니다."),
+    OAUTH_TOKEN_EXCHANGE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "OAUTH500", "OAuth 토큰 교환에 실패했습니다."),
 
     // 5001,5002
     // RAG 관련 오류 코드
