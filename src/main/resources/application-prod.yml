@@ -36,3 +36,9 @@ jwt:
   refresh:
     expiration: ${JWT_REFRESH_EXPIRATION:1209600000}
     header: RefreshToken
+
+oauth:
+  providers:
+    kakao:
+      client-id: ${KAKAO_CLIENT_ID}
+      client-secret: ${KAKAO_CLIENT_SECRET}

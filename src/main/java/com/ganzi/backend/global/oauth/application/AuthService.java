@@ -23,19 +23,6 @@ public class AuthService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    @Transactional
-    public LoginResponse login(String idToken) {
-        CustomUserDetails userDetails = idTokenService.loadUserByIdToken(idToken);
-        User user = userDetails.getUser();
-
-        String accessToken = jwtService.createAccessToken(user.getEmail(), user.getId());
-        String refreshToken = jwtService.createRefreshToken();
-
-        jwtService.updateRefreshToken(user.getEmail(), refreshToken);
-
-        return new LoginResponse(accessToken, refreshToken, user.getId(), user.getNickname());
-    }
-
     public UserInfoResponse getUserInfo(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.USER_NOT_FOUND));

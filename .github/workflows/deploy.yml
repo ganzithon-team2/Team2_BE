@@ -74,6 +74,8 @@ jobs:
           ANIMAL_API_SERVICE_KEY: ${{ secrets.ANIMAL_API_SERVICE_KEY }}
           UPSTAGE_API_KEY: ${{ secrets.UPSTAGE_API_KEY }}
           UPSTAGE_AI_API_KEY: ${{ secrets.UPSTAGE_AI_API_KEY }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -84,7 +86,8 @@ jobs:
             S3_REGION,S3_BUCKET_NAME,
             AWS_ACCESS_KEY,AWS_SECRET_ACCESS_KEY,
             JWT_SECRET_KEY,ANIMAL_API_SERVICE_KEY,
-            UPSTAGE_API_KEY, UPSTAGE_AI_API_KEY
+            UPSTAGE_API_KEY, UPSTAGE_AI_API_KEY,
+            KAKAO_CLIENT_ID,KAKAO_CLIENT_SECRET
           script: |
             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $(echo $IMAGE_URI | cut -d'/' -f1)
 
@@ -109,4 +112,6 @@ jobs:
               -e ANIMAL_API_SERVICE_KEY=$ANIMAL_API_SERVICE_KEY \
               -e UPSTAGE_API_KEY=$UPSTAGE_API_KEY \
               -e UPSTAGE_AI_API_KEY=$UPSTAGE_AI_API_KEY \
+              -e KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID \
+              -e KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET \
               $IMAGE_URI:$IMAGE_TAG

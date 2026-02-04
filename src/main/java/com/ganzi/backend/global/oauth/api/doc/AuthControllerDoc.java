@@ -1,26 +1,32 @@
 package com.ganzi.backend.global.oauth.api.doc;
 
 import com.ganzi.backend.global.code.dto.ApiResponse;
+import com.ganzi.backend.global.oauth.api.dto.request.OAuthCallbackRequest;
 import com.ganzi.backend.global.oauth.api.dto.response.LoginResponse;
 import com.ganzi.backend.global.oauth.api.dto.response.UserInfoResponse;
 import com.ganzi.backend.global.security.userdetails.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Tag(name = "로그인", description = "로그인 API")
 public interface AuthControllerDoc {
 
     @Operation(
-            summary = "카카오 소셜 로그인",
-            description = "카카오 ID Token으로 로그인하여 JWT 토큰을 발급받습니다"
+            summary = "OAuth 소셜 로그인 (Authorization Code 방식)",
+            description = "프론트엔드에서 받은 OAuth authorization code를 백엔드에서 토큰으로 교환하여 JWT를 발급합니다."
     )
-    ResponseEntity<ApiResponse<LoginResponse>> login(
-            @Parameter(description = "카카오 ID Token", required = true)
-            @RequestHeader("id_token") String idToken
+    ResponseEntity<ApiResponse<LoginResponse>> oauthCallback(
+            @Parameter(description = "OAuth 제공자 (kakao, google, apple)", required = true, example = "kakao")
+            @PathVariable String provider,
+
+            @Valid @RequestBody OAuthCallbackRequest request
     );
 
     @Operation(
